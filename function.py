@@ -1,5 +1,3 @@
-import uuid
-from datetime import datetime
 
 #student - student
 class Student:
@@ -27,7 +25,7 @@ class Grade:
 #functia primeste ca parametrii o lista de studenti, una de cursuri si una de note
   #cerinte pentru ca datele sa fie valide
     #1. toti studentii si toate cursurile din lista de note trebuie sa fie prezente si in listele lor respective
-    #2. toate notele sa fie intre 0 si 10
+    #2. toate notele sa fie intre 1 si 10
     #3. toti studentii sa aiba note la toate materiile
     #4. toate elementele din lista trebuie sa fie unice
     #5. toti studentii trebuie sa fie intr-un an intre 1 si 4
@@ -42,62 +40,42 @@ def countPassedStudents(students, courses, grades):
 
     for student in students:
         if student.firstName + student.lastName in studentsDict.keys():
-            return 'BAD_DATA'
+            return 'DUPLICATE_STUDENTS'
         else:
             if student.year < 1 or student.year > 4:
-                return 'BAD_DATA'
+                return 'INVALID_STUDENT_YEAR'
             studentsDict[student.firstName + student.lastName] = student
             studentsScore[student.firstName + student.lastName] = 0
 
     for course in courses:
        if course.name in coursesDict.keys():
-           return 'BAD_DATA'
+           return 'DUPLICATE_COURSE'
        else:
            if course.noOfCredits < 1 or course.noOfCredits > 6:
-               return 'BAD_DATA'
+               return 'INVALID_COURSE_CREDIT_NUMBER'
            coursesDict[course.name] = course
            totalCredits+=course.noOfCredits
 
     for grade in grades:
         if grade.student.firstName + grade.student.lastName not in studentsDict.keys():
-            return 'BAD_DATA'
+            return 'GRADE_STUDENT_DOES_NOT_EXIST'
         if grade.course.name not in coursesDict.keys():
-            return 'BAD_DATA'
+            return 'GRADE_COURSE_DOES_NOT_EXIST'
         if grade.grade < 1 or grade.grade > 10:
-            return 'BAD_DATA'
+            return 'INVALID_GRADE_VALUE'
         studentsScore[grade.student.firstName + grade.student.lastName] += grade.grade * grade.course.noOfCredits
-        if grade.student.firstName + grade.student.lastName not in   gradedCoursesPerStudent.keys():
+        if grade.student.firstName + grade.student.lastName not in gradedCoursesPerStudent.keys():
             gradedCoursesPerStudent[grade.student.firstName + grade.student.lastName] = [grade.course.name]
         else:
             if grade.course.name in gradedCoursesPerStudent[grade.student.firstName + grade.student.lastName]:
-                return 'BAD_DATA'
-            else:
+                return 'SAME_COURSE_GRADED_TWICE'
+            else: #adds grade course to list of courses the student has been graded on
                 gradedCoursesPerStudent.update({grade.student.firstName + grade.student.lastName: [*gradedCoursesPerStudent[grade.student.firstName + grade.student.lastName], grade.course.name]})
 
     for student in studentsScore.keys():
+        if len(gradedCoursesPerStudent[student]) != len(courses):
+            return 'NOT_ALL_COURSES_HAVE_BEEN_GRADED'
         if studentsScore[student] / totalCredits >= 5:
-            noOfPassedStudents+=1
+            noOfPassedStudents += 1
     return noOfPassedStudents
 
-
-
-
-students = [
-    Student("Petru", "Cioinica", 3),
-    Student("Mihai", "Cioinica", 1)
-]
-
-classes = [
-    Course("OOP", 6),
-    Course("LFA", 4),
-]
-
-grades = [
-    Grade(students[0], classes[0], 5),
-    Grade(students[0], classes[1], 8),
-    Grade(students[1], classes[0], 4),
-    Grade(students[1], classes[1], 10)
-]
-
-
-print(countPassedStudents(students,classes,grades))

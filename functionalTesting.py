@@ -81,5 +81,65 @@ class FunctionalTests(unittest.TestCase):
                                          Grade(Student("Petru", "Cioinica", 3), Course("LFA", 4), 8),
                                          Grade(Student("Mihail", "Cioinica", 3), Course("OOP", 6), 4),
                                          Grade(Student("Mihail", "Cioinica", 3), Course("OOP", 6), 10)])
-        print("Result in c8", result)
         self.assertEqual(result, "SAME_COURSE_GRADED_TWICE")
+
+    #urmatoarele teste sunt pentru boundry value analysis
+
+    #toate listele goale
+    def test_boundry_1(self):
+        result = countPassedStudents([], [], [])
+        self.assertEqual(result,0)
+
+    #nota mai mare de 10
+    def test_boundry_2(self):
+        result = countPassedStudents([Student("Petru", "Cioinica", 3)],
+                                     [Course("OOP", 6), Course("LFA", 4)], [
+                                         Grade(Student("Petru", "Cioinica", 3), Course("OOP", 6), 255),
+                                         Grade(Student("Petru", "Cioinica", 3), Course("LFA", 4), 8),
+                                        ])
+        self.assertEqual(result, "INVALID_GRADE_VALUE")
+
+    #nota mai mica de 1
+    def test_boundry_3(self):
+        result = countPassedStudents([Student("Petru", "Cioinica", 3)],
+                                     [Course("OOP", 6), Course("LFA", 4)], [
+                                         Grade(Student("Petru", "Cioinica", 3), Course("OOP", 6), 0),
+                                         Grade(Student("Petru", "Cioinica", 3), Course("LFA", 4), 8),
+                                     ])
+        self.assertEqual(result, "INVALID_GRADE_VALUE")
+
+    #student cu an mai mare decat 4
+    def test_boundry_4(self):
+        result = countPassedStudents([Student("Petru", "Cioinica", 12)],
+                                     [Course("OOP", 6), Course("LFA", 4)], [
+                                         Grade(Student("Petru", "Cioinica", 3), Course("OOP", 6), 5),
+                                         Grade(Student("Petru", "Cioinica", 3), Course("LFA", 4), 8),
+                                     ])
+        self.assertEqual(result, "INVALID_STUDENT_YEAR")
+
+    #student cu an mai mic decat 1
+    def test_boundry_5(self):
+        result = countPassedStudents([Student("Petru", "Cioinica", 0)],
+                                     [Course("OOP", 6), Course("LFA", 4)], [
+                                         Grade(Student("Petru", "Cioinica", 3), Course("OOP", 6), 5),
+                                         Grade(Student("Petru", "Cioinica", 3), Course("LFA", 4), 8),
+                                     ])
+        self.assertEqual(result, "INVALID_STUDENT_YEAR")
+
+    #curs cu numar de credite mai mare decat 6
+    def test_boundry_6(self):
+        result = countPassedStudents([Student("Petru", "Cioinica", 1)],
+                                     [Course("OOP", 6), Course("LFA", 20)], [
+                                         Grade(Student("Petru", "Cioinica", 3), Course("OOP", 6), 5),
+                                         Grade(Student("Petru", "Cioinica", 3), Course("LFA", 4), 8),
+                                     ])
+        self.assertEqual(result, "INVALID_COURSE_CREDIT_NUMBER")
+
+    #curs cu numar de credite mai mic decat 1
+    def test_boundry_7(self):
+        result = countPassedStudents([Student("Petru", "Cioinica", 1)],
+                                     [Course("OOP", 6), Course("LFA", 0)], [
+                                         Grade(Student("Petru", "Cioinica", 3), Course("OOP", 6), 5),
+                                         Grade(Student("Petru", "Cioinica", 3), Course("LFA", 4), 8),
+                                     ])
+        self.assertEqual(result, "INVALID_COURSE_CREDIT_NUMBER")

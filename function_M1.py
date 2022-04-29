@@ -1,16 +1,15 @@
-# functie care returneaza numarul de studenti care au media peste 5 (media se calculeaza ponderat in functie de nr de credite)
-# sau un mesaj de eroare in functie de validitatea datelor.
-# functia primeste ca parametrii o lista de studenti, una de cursuri si una de note
-# cerinte pentru ca datele sa fie valide
-# 1. toti studentii si toate cursurile din lista de note trebuie sa fie prezente si in listele lor respective
-# 2. toate notele sa fie intre 1 si 10
-# 3. toti studentii sa aiba note la toate materiile
-# 4. toate elementele din lista trebuie sa fie unice
-# 5. toti studentii trebuie sa fie intr-un an intre 1 si 4
-# Pentru ca un student sa fie trecut trbuie ca media lui sa fie peste 5
+"""
+Functia de countPassedStudentsM1 este un mutant al functiei countPassedStudents, un first-order-mutant,
+avand ca singura modificare la linia 21, studentsDict.keys() -> studentsDict.values()
+testul functional test_echiv_c6() si cel structural test_duplicate_students() omoara mutantul acesta, facand
+diferenta intre programul initial si cel mutant.
+
+Programul nu este doar adus pe alta ramura a acestuia, rezultatul returnat este complet diferit din cauza mutatiei,
+rezultanda ca mutatia countPassedStudentsM1 este una puternica (Strong Mutation).
+"""
 
 
-def countPassedStudents(students, courses, grades):
+def countPassedStudentsM1(students, courses, grades):
     studentsDict = {}
     coursesDict = {}
     studentsScore = {}
@@ -19,7 +18,7 @@ def countPassedStudents(students, courses, grades):
     totalCredits = 0
 
     for student in students:
-        if student.firstName + student.lastName in studentsDict.keys():
+        if student.firstName + student.lastName in studentsDict.values():
             return 'DUPLICATE_STUDENTS'
         else:
             if student.year < 1 or student.year > 4:

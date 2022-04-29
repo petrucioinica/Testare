@@ -1,5 +1,8 @@
-from function import Student, Course, Grade, countPassedStudents
+from classes import Course, Student, Grade
+from function import countPassedStudents
 import unittest
+
+from tryFunction import tryCountPassedStudents
 
 
 class StructuralTests(unittest.TestCase):
@@ -8,52 +11,52 @@ class StructuralTests(unittest.TestCase):
 
     # basic function with empty values, should return 0
     def test_basic_function(self):
-        result = countPassedStudents([], [], [])
+        result = tryCountPassedStudents([], [], [])
         self.assertEqual(result, 0)
 
     # test for a list with more of the same student
     def test_duplicate_students(self):
-        result = countPassedStudents(students + students_2, classes, grades)
+        result = tryCountPassedStudents(students + students_2, classes, grades)
         self.assertEqual(result, "DUPLICATE_STUDENTS")
 
     # one student has a Year value greater than 3
     def test_invalid_year(self):
-        result = countPassedStudents(students_2, classes, grades)
+        result = tryCountPassedStudents(students_2, classes, grades)
         self.assertEqual(result, "INVALID_STUDENT_YEAR")
 
     # more courses have the same name
     def test_duplicate_course(self):
-        result = countPassedStudents(students, classes + classes_2, grades)
+        result = tryCountPassedStudents(students, classes + classes_2, grades)
         self.assertEqual(result, "DUPLICATE_COURSE")
 
     # one of the courses has an abnormal number of credits
     def test_invalid_courses_credits(self):
-        result = countPassedStudents(students, classes_2, grades)
+        result = tryCountPassedStudents(students, classes_2, grades)
         self.assertEqual(result, "INVALID_COURSE_CREDIT_NUMBER")
 
     # an inexistent student has been graded
     def test_grades_inexistent_student(self):
-        result = countPassedStudents(students, classes, grades_inexistent_student)
+        result = tryCountPassedStudents(students, classes, grades_inexistent_student)
         self.assertEqual(result, "GRADE_STUDENT_DOES_NOT_EXIST")
 
     # a student has been graded for an inexistent course
     def test_grades_inexistent_course(self):
-        result = countPassedStudents(students, classes, grades_inexistent_course)
+        result = tryCountPassedStudents(students, classes, grades_inexistent_course)
         self.assertEqual(result, "GRADE_COURSE_DOES_NOT_EXIST")
 
     # the grade is out of bounds (1, 10)
     def test_grades_invalid_grade(self):
-        result = countPassedStudents(students, classes, grades_invalid_grades)
+        result = tryCountPassedStudents(students, classes, grades_invalid_grades)
         self.assertEqual(result, "INVALID_GRADE_VALUE")
 
     # the same student has been graded twice for a course
     def test_grades_same_course_graded_twice(self):
-        result = countPassedStudents(students, classes, grades_same_course_graded_twice)
+        result = tryCountPassedStudents(students, classes, grades_same_course_graded_twice)
         self.assertEqual(result, "SAME_COURSE_GRADED_TWICE")
 
     # a student has no grade on at least one course
     def test_grades_not_all_courses_graded(self):
-        result = countPassedStudents(students, classes, grades_not_all_courses_graded)
+        result = tryCountPassedStudents(students, classes, grades_not_all_courses_graded)
         self.assertEqual(result, "NOT_ALL_COURSES_HAVE_BEEN_GRADED")
 
 
